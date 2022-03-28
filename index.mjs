@@ -3,6 +3,7 @@ import { $ } from 'zx';
 
 const unixSocketServer = net.createServer();
 const unixSocketServer2 = net.createServer();
+
 unixSocketServer.listen('\0test', () => {
   console.log('now listening');
 });
@@ -18,10 +19,22 @@ unixSocketServer.on('connection', (s) => {
   s.end();*/
 });
 
+unixSocketServer2.on('error', (e) => {
+  if (e.code === 'EADDRINUSE') {
+    console.log('Address in use, retrying...');
+    setTimeout(() => {
+      unixSocketServer2.close();
+
+      //server.listen(PORT, HOST);
+    }, 1000);
+  }
+});
+
 unixSocketServer2.on('connection', (s) => {
   console.log('got connection!');
-  s.write('hello world');
-  s.end();
+/*  s.write('hello world');
+  s.end();*/
 });
+
 
 await $`am broadcast --user 0 -n com.termux.gui/.GUIReceiver --es mainSocket test --es eventSocket test2`
