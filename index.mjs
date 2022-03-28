@@ -14,8 +14,8 @@ unixSocketServer2.listen('\0test2', () => {
 
 unixSocketServer.on('connection', (s) => {
   console.log('got connection!');
-  s.write('hello world');
-  s.end();
+/*  s.write('hello world');
+  s.end();*/
 });
 
 unixSocketServer2.on('connection', (s) => {
